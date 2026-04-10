@@ -9,16 +9,24 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
 
   const login = async () => {
-    if (!email || !pass) { setError("Enter email and password"); return; }
-    setLoading(true);
-    setError("");
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-    } catch (e) {
-      setError("Wrong email or password. Try again.");
-    }
-    setLoading(false);
-  };
+  if (!email || !pass) {
+    setError("Enter email and password");
+    return;
+  }
+
+  setLoading(true);
+  setError("");
+
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+    console.log("Login success");
+  } catch (e) {
+    console.log("Firebase Error:", e);
+    setError(e.message);
+  }
+
+  setLoading(false);
+};
 
   return (
     <div className="login-page">
