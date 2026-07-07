@@ -1,0 +1,409 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ─── Root ───────────────────────────────────────────── */
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  background: #052e16;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  z-index: 9999;
+}
+
+.splash-screen.exit {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+}
+
+/* ─── Phone shell (browser) ──────────────────────────── */
+.splash-phone {
+  width: 390px;
+  height: 780px;
+  max-width: 100vw;
+  max-height: 100vh;
+  /* Dark forest green — matches header gradient exactly */
+  background: linear-gradient(140deg, #052e16 0%, #064e27 35%, #0a6640 65%, #0d7a4a 100%);
+  border-radius: 38px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 32px 90px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(52, 211, 153, 0.12),
+    0 0 80px rgba(5, 46, 22, 0.6);
+}
+
+@media (max-width: 430px) {
+  .splash-phone {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+.splash-phone-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 90px;
+}
+
+/* ─── Background layer ───────────────────────────────── */
+.splash-bg {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.splash-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  animation: meshReveal 2s ease 1s forwards;
+}
+
+/* ─── Concentric rings — white/mint on dark green ───── */
+.splash-concentric-rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 900px;
+  opacity: 0;
+  animation: meshReveal 1.8s ease 0.5s forwards;
+}
+
+.splash-concentric-rings::before,
+.splash-concentric-rings::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(52, 211, 153, 0.10);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.splash-concentric-rings::before {
+  width: 520px;
+  height: 520px;
+}
+
+.splash-concentric-rings::after {
+  width: 780px;
+  height: 780px;
+}
+
+/* ─── Mesh gradient orbs — brighter mint on dark ─────── */
+.splash-mesh {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  animation: meshReveal 1.4s ease forwards;
+}
+
+.splash-mesh-1 {
+  width: 120vw; height: 120vw;
+  max-width: 680px; max-height: 680px;
+  top: -35%; right: -35%;
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.15) 0%, transparent 62%);
+  animation-delay: 0s;
+}
+
+.splash-mesh-2 {
+  width: 100vw; height: 100vw;
+  max-width: 560px; max-height: 560px;
+  bottom: -30%; left: -35%;
+  background: radial-gradient(circle, rgba(10, 102, 64, 0.7) 0%, transparent 62%);
+  animation-delay: 0.2s;
+}
+
+.splash-mesh-3 {
+  width: 40vw; height: 40vw;
+  max-width: 220px; max-height: 220px;
+  top: 18%; left: 4%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 65%);
+  animation-delay: 0.4s;
+}
+
+@keyframes meshReveal { to { opacity: 1; } }
+
+/* ─── Dot grid — white dots on dark green ────────────── */
+.splash-dot-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  animation: meshReveal 1.8s ease 0.3s forwards;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+}
+
+/* ─── Floating glass orbs — white glass on dark ─────── */
+.splash-orb {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  opacity: 0;
+  animation: orbReveal 1.6s ease forwards, orbFloat 6s ease-in-out infinite;
+}
+
+.splash-orb-1 { width: 80px; height: 80px; top: 11%; right: 12%; animation-delay: 0.6s, 2.6s; }
+.splash-orb-2 { width: 48px; height: 48px; top: 28%; left: 8%;  animation-delay: 0.9s, 3.0s; }
+.splash-orb-3 { width: 32px; height: 32px; bottom: 28%; right: 9%; animation-delay: 1.1s, 3.4s; }
+.splash-orb-4 { width: 22px; height: 22px; bottom: 23%; left: 13%; animation-delay: 1.3s, 3.8s; }
+
+@keyframes orbReveal { to { opacity: 1; } }
+@keyframes orbFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-11px); }
+}
+
+/* ─── Whisper lines — mint on dark ──────────────────── */
+.splash-hline {
+  position: absolute;
+  height: 1px;
+  width: 80%; left: 10%;
+  background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.18), transparent);
+  opacity: 0;
+  animation: meshReveal 1s ease forwards;
+}
+.splash-hline-1 { top: 22%; animation-delay: 0.7s; }
+.splash-hline-2 { bottom: 28%; animation-delay: 0.9s; }
+
+/* ─── Soft glow behind logo — matches header glow ───── */
+.splash-glow-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -68%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.18) 0%, transparent 70%);
+  opacity: 0;
+  animation: meshReveal 1.2s ease 0.3s forwards;
+  pointer-events: none;
+}
+
+/* ─── Icon wrap ──────────────────────────────────────── */
+.splash-icon-wrap {
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+  animation: riseIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Logo — white on dark green ────────────────────── */
+.splash-logo {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  animation: logoFloat 2.8s ease-in-out 1.2s infinite;
+  /* White logo on dark green background */
+  filter: brightness(0) invert(1);
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-7px); }
+}
+
+/* ─── App name row ───────────────────────────────────── */
+.splash-name-row {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: glitchIn 0.8s ease 0.88s forwards;
+  margin-bottom: 26px;
+}
+
+/* ─── Brand name — white + mint, matches header exactly */
+.splash-name {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  /* White for "Local" — same as header h1 */
+  color: #ffffff;
+  line-height: 1;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.splash-name em {
+  /* Mint green for "Wala" — same weight as "Local" */
+  color:#16a34a;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.splash-divider {
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.45), transparent);
+  margin: 10px auto;
+  opacity: 0;
+  animation: meshReveal 0.6s ease 1.45s forwards;
+}
+
+/* ─── Tagline — "WORKER MARKETPLACE" in mint ─────────── */
+.splash-tagline-en {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  /* Mint green — readable on dark background */
+  color: rgba(52, 211, 153, 0.70);
+  opacity: 0;
+  transform: translateY(8px);
+  animation: riseIn 0.7s ease 1.55s forwards;
+}
+
+/* ─── Telugu tagline — white/near-white on dark ─────── */
+.splash-tagline-te {
+  font-family: 'Noto Sans Telugu', 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  /* High contrast white on dark — matches .lw-brand-tag fix */
+  color: rgba(255, 255, 255, 0.88);
+  letter-spacing: 0.3px;
+  margin-top: 7px;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: riseIn 0.7s ease 1.95s forwards;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.22);
+}
+
+@keyframes riseIn {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes glitchIn {
+  0%  { opacity: 0; transform: translateX(-4px) skewX(-3deg); }
+  30% { opacity: 1; transform: translateX(4px)  skewX(3deg); }
+  60% { transform: translateX(-2px) skewX(-1deg); }
+  100%{ opacity: 1; transform: translateX(0) skewX(0); }
+}
+
+/* ─── Trust pills — glass style on dark green ────────── */
+.splash-trust-row {
+  display: flex;
+  gap: 11px;
+  margin-bottom: 36px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: riseIn 0.7s ease 2.3s forwards;
+}
+
+.splash-pill {
+  /* Frosted glass — matches header pill rgba(52,211,153,0.12) */
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.28);
+  border-radius: 100px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.splash-pill-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  /* Bright mint dot — matches .lw-dot #34d399 */
+  background: #34d399;
+  box-shadow: 0 0 6px rgba(52, 211, 153, 0.9);
+  flex-shrink: 0;
+}
+
+.splash-pill-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 10.5px;
+  font-weight: 500;
+  /* White text on dark pill */
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+/* ─── Progress bar — mint on dark ───────────────────── */
+.splash-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  animation: meshReveal 0.5s ease 2.65s forwards;
+}
+
+.splash-progress-track {
+  width: 130px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.10);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.splash-progress-fill {
+  height: 100%;
+  width: 0%;
+  /* Mint gradient progress — matches header shine line */
+  background: linear-gradient(90deg, rgba(52, 211, 153, 0.6), #34d399);
+  border-radius: 10px;
+  animation: fillProgress 2s cubic-bezier(0.4, 0, 0.2, 1) 2.75s forwards;
+}
+
+@keyframes fillProgress { to { width: 100%; } }
+
+.splash-progress-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(52, 211, 153, 0.55);
+  font-weight: 300;
+}
+
+/* ─── Bottom wordmark ────────────────────────────────── */
+.splash-bottom {
+  position: absolute;
+  bottom: max(32px, env(safe-area-inset-bottom, 32px));
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  animation: meshReveal 0.6s ease 3.4s forwards;
+}
+
+.splash-rule {
+  width: 28px;
+  height: 1px;
+  background: rgba(52, 211, 153, 0.28);
+}
+
+.splash-bottom-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(52, 211, 153, 0.45);
+  font-weight: 300;
+}

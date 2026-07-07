@@ -1,17 +1,19 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDHnp7oLzgS0l7W7gZg-6c-bD1_3z2RFCA",
-  authDomain: "local-workers-b33d2.firebaseapp.com",
-  projectId: "local-workers-b33d2",
-  storageBucket: "local-workers-b33d2.firebasestorage.app", // ✅ use this
-  messagingSenderId: "768305995847",
-  appId: "1:768305995847:web:e55e98b6d5535d81121162"
+  apiKey: "AIzaSyC0IBi-jGrDD_J2D0jW1PxR9bk1z9SCKiU",
+  authDomain: "localwala-d105d.firebaseapp.com",
+  projectId: "localwala-d105d",
+  storageBucket: "localwala-d105d.firebasestorage.app",
+  messagingSenderId: "952352779850",
+  appId: "1:952352779850:web:7541f4d5073b78297480b3"
 };
 
 const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+export const storage = getStorage(app);

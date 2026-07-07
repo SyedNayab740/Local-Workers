@@ -1,87 +1,247 @@
-import React, { useState, useEffect } from "react";
-import "./index.css";
-import { auth } from "./lib/firebase";
-import { onAuthStateChanged } from "firebase/auth";
-import FindWorkers from "./pages/FindWorkers";
+import SplashScreen from "./components/Splashscreen";
+import React, {
+  useState,
+  useEffect
+} from "react";
+
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+  useLocation
+} from "react-router-dom";
+
+import {
+  onAuthStateChanged
+} from "firebase/auth";
+
+import {
+  auth
+} from "./lib/firebase";
+
+import AppShell from "./components/AppShell";
+
+import FindWorker from "./pages/FindWorker";
+
+import Services from "./pages/Services";
+
 import RegisterWorker from "./pages/RegisterWorker";
-import AdminPanel from "./pages/AdminPanel";
+
 import AdminLogin from "./pages/AdminLogin";
-import UpgradeModal from "./components/UpgradeModal";
+
+import AdminPanel from "./pages/AdminPanel";
 
 export default function App() {
-  const [tab, setTab] = useState("find");
-  const [adminUser, setAdminUser] = useState(null);
-  const [checkingAuth, setCheckingAuth] = useState(true);
-  const [upgradeModal, setUpgradeModal] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [showInstall, setShowInstall] = useState(false);
-
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      setAdminUser(user);
-      setCheckingAuth(false);
-    });
-    return unsub;
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setShowInstall(true);
-    });
-  }, []);
-
-  const handleInstall = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === "accepted") setShowInstall(false);
-    }
-  };
-
-  if (checkingAuth) return <div className="loading">Loading...</div>;
-  if (tab === "admin" && !adminUser) return <AdminLogin onLogin={() => {}} />;
 
   return (
-    <div className="app-shell">
-      {showInstall && (
-        <div className="install-bar">
-          <div>
-            <strong>Add to your home screen</strong>
-            <span>Works like an app — no Play Store needed</span>
-          </div>
-          <button className="install-btn" onClick={handleInstall}>Install</button>
-        </div>
-      )}
 
-      <div className="hdr">
-        <div className="hdr-ic">🔧</div>
-        <div>
-          <h1>Local Workers / స్థానిక పనివారు</h1>
-          <small>Verified local workers • Safe &amp; trusted</small>
-        </div>
-      </div>
+    <BrowserRouter>
 
-      <div className="tabs">
-        <div className={`tab ${tab === "find" ? "active" : ""}`} onClick={() => setTab("find")}>
-          Find Worker<br /><span style={{ fontSize: 9 }}>వెతకండి</span>
-        </div>
-        <div className={`tab ${tab === "register" ? "active" : ""}`} onClick={() => setTab("register")}>
-          Register as Worker (Free)<br /><span style={{ fontSize: 9 }}>నమోదు చేయండి</span>
-        </div>
-        <div className={`tab ${tab === "admin" ? "active" : ""}`} onClick={() => setTab("admin")}>
-          Admin
-        </div>
-      </div>
+      <MainApp />
 
-      <div className="content">
-        {tab === "find" && <FindWorkers onUpgrade={() => setUpgradeModal(true)} />}
-        {tab === "register" && <RegisterWorker />}
-        {tab === "admin" && adminUser && <AdminPanel />}
-      </div>
+    </BrowserRouter>
 
-      {upgradeModal && <UpgradeModal onClose={() => setUpgradeModal(false)} />}
-    </div>
   );
+
+}
+
+function MainApp() {
+
+  const navigate =
+    useNavigate();
+
+  const location =
+    useLocation();
+
+  const [tab, setTab] =
+    useState("find");
+
+  const [admin, setAdmin] =
+    useState(null);
+
+  const [authLoading, setAuthLoading] =
+    useState(true);
+    const [showSplash, setShowSplash] = useState(true);
+
+  /* TAB SYNC */
+
+  useEffect(() => {
+
+    if (
+      location.pathname === "/"
+    ) {
+
+      setTab("find");
+
+    }
+
+    else if (
+      location.pathname === "/services"
+    ) {
+
+      setTab("services");
+
+    }
+
+    else if (
+      location.pathname === "/register"
+    ) {
+
+      setTab("register");
+
+    }
+
+    else if (
+      location.pathname === "/admin"
+    ) {
+
+      setTab("admin");
+
+    }
+
+  }, [location.pathname]);
+
+  /* AUTH */
+
+  useEffect(() => {
+
+    const unsub =
+      onAuthStateChanged(
+
+        auth,
+
+        (user) => {
+
+          setAdmin(user);
+
+          setAuthLoading(false);
+
+        }
+
+      );
+
+    return unsub;
+
+  }, []);
+
+  /* LOADING */
+
+if (authLoading) {
+return (
+<div
+style={{
+display: "flex",
+alignItems: "center",
+justifyContent: "center",
+height: "100vh",
+background: "#f2f3f7"
+}}
+>
+Loading... </div>
+);
+}
+
+if (showSplash) {
+return (
+<SplashScreen
+onComplete={() => setShowSplash(false)}
+/>
+);
+}
+
+
+  /* NAVIGATION */
+
+  const handleTabChange =
+    (newTab) => {
+
+      setTab(newTab);
+
+      if (newTab === "find") {
+
+        navigate("/");
+
+      }
+
+      else {
+
+        navigate(`/${newTab}`);
+
+      }
+
+    };
+
+  /* APP */
+
+  return (
+
+    <AppShell
+      tab={tab}
+      setTab={handleTabChange}
+      admin={admin}
+    >
+
+      <Routes>
+
+        {/* HOME */}
+
+        <Route
+          path="/"
+          element={
+            <FindWorker />
+          }
+        />
+
+        {/* SERVICES */}
+
+        <Route
+          path="/services"
+          element={
+            <Services />
+          }
+        />
+
+        {/* REGISTER */}
+
+        <Route
+          path="/register"
+          element={
+            <RegisterWorker />
+          }
+        />
+
+        {/* ADMIN */}
+
+        <Route
+          path="/admin"
+          element={
+            admin
+              ? (
+                <AdminPanel
+                  user={admin}
+                />
+              )
+              : (
+                <AdminLogin />
+              )
+          }
+        />
+
+        {/* FALLBACK */}
+
+        <Route
+          path="*"
+          element={
+            <Navigate to="/" />
+          }
+        />
+
+      </Routes>
+
+    </AppShell>
+
+  );
+
 }
